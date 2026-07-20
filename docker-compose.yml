@@ -7,7 +7,3 @@ services:
       - "9006:9006"
     env_file:
       - .env
-    volumes:
-      # Mount your Google service account JSON file into the container.
-      # The path inside the container must match GOOGLE_SHEETS_CREDENTIALS_FILE in .env.
-      - ${GOOGLE_SHEETS_CREDENTIALS_FILE_HOST}:/app/credentials.json:ro

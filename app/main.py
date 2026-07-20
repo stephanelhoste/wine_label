@@ -12,14 +12,17 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from PIL import Image
 import gspread
-from google.oauth2.service_account import Credentials
+from google.oauth2.credentials import Credentials
+from google.auth.transport.requests import Request
 
 load_dotenv()
 
 app = FastAPI(title="Cellar Ledger")
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-GOOGLE_SHEETS_CREDENTIALS_FILE = os.getenv("GOOGLE_SHEETS_CREDENTIALS_FILE", "credentials.json")
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
+GOOGLE_REFRESH_TOKEN = os.getenv("GOOGLE_REFRESH_TOKEN")
 GOOGLE_SHEET_ID = os.getenv("GOOGLE_SHEET_ID")
 
 openai_client = OpenAI(api_key=OPENAI_API_KEY)
@@ -75,10 +78,15 @@ def resize_and_encode(image_bytes: bytes) -> tuple[str, str]:
 
 
 def append_to_sheet(fields: dict, researched: dict) -> None:
-    creds = Credentials.from_service_account_file(
-        GOOGLE_SHEETS_CREDENTIALS_FILE,
+    creds = Credentials(
+        token=None,
+        refresh_token=GOOGLE_REFRESH_TOKEN,
+        client_id=GOOGLE_CLIENT_ID,
+        client_secret=GOOGLE_CLIENT_SECRET,
+        token_uri="https://oauth2.googleapis.com/token",
         scopes=["https://www.googleapis.com/auth/spreadsheets"],
     )
+    creds.refresh(Request())
     gc = gspread.authorize(creds)
     sh = gc.open_by_key(GOOGLE_SHEET_ID)
     ws = sh.sheet1
