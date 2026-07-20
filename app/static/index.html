@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cellar Ledger</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ── Upload Screen ─────────────────────────────────── -->
+  <div id="screen-upload" class="screen active">
+    <header>
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M8 2h8l1 4H7L8 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M7 6c0 0-2 3-2 7a7 7 0 0014 0c0-4-2-7-2-7H7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M9 13c.5 1.5 2 2.5 3 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Cellar Ledger
+      </div>
+    </header>
+
+    <main>
+      <div class="upload-card">
+        <h1>Scan a wine label</h1>
+        <p class="subtitle">Photograph your bottle, let AI read the label, then confirm before it logs to your cellar.</p>
+
+        <div
+          id="drop-zone"
+          class="drop-zone"
+          role="button"
+          tabindex="0"
+          aria-label="Upload wine label photo"
+        >
+          <div class="drop-zone-inner" id="drop-idle">
+            <svg class="upload-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M24 32V16M16 24l8-8 8 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8 36h32" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+            </svg>
+            <p class="drop-label">Drop a photo here</p>
+            <p class="drop-sub">or click to browse · JPG / PNG</p>
+          </div>
+
+          <div class="drop-zone-inner hidden" id="drop-preview">
+            <img id="preview-img" src="" alt="Label preview" />
+            <div class="preview-meta">
+              <span id="preview-name"></span>
+              <span id="preview-size"></span>
+            </div>
+            <button class="link-btn" id="btn-change-photo">Change photo</button>
+          </div>
+        </div>
+
+        <input type="file" id="file-input" accept="image/jpeg,image/jpg,image/png" hidden />
+
+        <button class="btn-primary" id="btn-scan" disabled>Scan label →</button>
+
+        <p class="error hidden" id="upload-error"></p>
+      </div>
+    </main>
+  </div>
+
+  <!-- ── Loading Overlay ───────────────────────────────── -->
+  <div id="overlay-loading" class="overlay hidden" aria-live="polite">
+    <div class="spinner"></div>
+    <p id="loading-msg">Reading label…</p>
+  </div>
+
+  <!-- ── Validate Screen ───────────────────────────────── -->
+  <div id="screen-validate" class="screen">
+    <header>
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M8 2h8l1 4H7L8 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M7 6c0 0-2 3-2 7a7 7 0 0014 0c0-4-2-7-2-7H7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M9 13c.5 1.5 2 2.5 3 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Cellar Ledger
+      </div>
+    </header>
+
+    <main>
+      <div class="validate-card">
+        <div class="step-badge">Step 2 of 3 — Confirm details</div>
+        <h1>Does this look right?</h1>
+        <p class="subtitle">AI read the label for you. Correct any field before logging — these details drive the tasting notes and pricing lookup.</p>
+
+        <form id="validate-form" autocomplete="off">
+          <div class="field-group">
+            <label for="f-producer">Producer / Brand</label>
+            <input type="text" id="f-producer" name="producer" placeholder="e.g. Château Margaux" />
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label for="f-vintage">Vintage</label>
+              <input type="text" id="f-vintage" name="vintage" placeholder="e.g. 2019" maxlength="4" />
+            </div>
+            <div class="field-group">
+              <label for="f-variety">Grape variety</label>
+              <input type="text" id="f-variety" name="variety" placeholder="e.g. Cabernet Sauvignon" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label for="f-appellation">Appellation</label>
+              <input type="text" id="f-appellation" name="appellation" placeholder="e.g. Margaux AOC" />
+            </div>
+            <div class="field-group">
+              <label for="f-country">Country</label>
+              <input type="text" id="f-country" name="country" placeholder="e.g. France" />
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-ghost" id="btn-discard">← Start over</button>
+            <button type="submit" class="btn-primary">Confirm &amp; research →</button>
+          </div>
+        </form>
+
+        <p class="error hidden" id="validate-error"></p>
+      </div>
+    </main>
+  </div>
+
+  <!-- ── Result Screen ─────────────────────────────────── -->
+  <div id="screen-result" class="screen">
+    <header>
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M8 2h8l1 4H7L8 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M7 6c0 0-2 3-2 7a7 7 0 0014 0c0-4-2-7-2-7H7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M9 13c.5 1.5 2 2.5 3 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Cellar Ledger
+      </div>
+    </header>
+
+    <main>
+      <div class="result-card">
+        <div class="result-saved">
+          <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"/></svg>
+          Logged to your cellar
+        </div>
+
+        <div class="wine-header">
+          <h1 id="r-title"></h1>
+          <div class="wine-meta">
+            <span id="r-appellation"></span>
+            <span id="r-country"></span>
+          </div>
+        </div>
+
+        <div class="result-stats">
+          <div class="stat">
+            <span class="stat-label">Rating</span>
+            <span class="stat-value" id="r-rating"></span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Est. price</span>
+            <span class="stat-value" id="r-price"></span>
+          </div>
+        </div>
+
+        <div class="result-section">
+          <h2>Tasting notes</h2>
+          <p id="r-tasting-notes"></p>
+        </div>
+
+        <div class="result-section">
+          <h2>Aromas &amp; flavors</h2>
+          <div id="r-aromas" class="aroma-tags"></div>
+        </div>
+
+        <button class="btn-primary" id="btn-new-scan">Scan another bottle</button>
+      </div>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
