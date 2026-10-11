@@ -10,6 +10,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app/ .
 
 # Expose the app port
-EXPOSE 9006
+EXPOSE 5000
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "9006"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000"]

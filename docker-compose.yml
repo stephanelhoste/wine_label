@@ -4,6 +4,6 @@ services:
     container_name: cellar-ledger
     restart: unless-stopped
     ports:
-      - "9006:9006"
+      - "9006:5000"
     env_file:
       - .env
