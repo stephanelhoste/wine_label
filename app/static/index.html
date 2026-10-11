@@ -8,9 +8,59 @@
 </head>
 <body>
 
-  <!-- ── Upload Screen ─────────────────────────────────── -->
-  <div id="screen-upload" class="screen active">
+  <!-- ── Home Screen ───────────────────────────────────── -->
+  <div id="screen-home" class="screen active">
     <header>
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M8 2h8l1 4H7L8 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M7 6c0 0-2 3-2 7a7 7 0 0014 0c0-4-2-7-2-7H7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M9 13c.5 1.5 2 2.5 3 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Cellar Ledger
+      </div>
+    </header>
+    <main class="home-main">
+      <h1 class="home-title">What would you like to do?</h1>
+      <div class="home-choices">
+        <button class="choice-card" id="btn-go-scan">
+          <div class="choice-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M3 9V5a2 2 0 012-2h4M3 15v4a2 2 0 002 2h4M21 9V5a2 2 0 00-2-2h-4M21 15v4a2 2 0 01-2 2h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="choice-text">
+            <span class="choice-title">Scan a label</span>
+            <span class="choice-sub">Photograph a bottle and add it to your cellar</span>
+          </div>
+          <svg class="choice-arrow" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+        </button>
+
+        <button class="choice-card" id="btn-go-cellar">
+          <div class="choice-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M4 6h16M4 10h16M4 14h8M4 18h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="18" cy="16" r="3" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M20.5 18.5l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="choice-text">
+            <span class="choice-title">My Cellar</span>
+            <span class="choice-sub">Browse and manage the wines you've logged</span>
+          </div>
+          <svg class="choice-arrow" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <!-- ── Upload Screen ─────────────────────────────────── -->
+  <div id="screen-upload" class="screen">
+    <header>
+      <button class="back-btn" id="btn-upload-back" aria-label="Back">
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+      </button>
       <div class="logo">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M8 2h8l1 4H7L8 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
@@ -26,13 +76,7 @@
         <h1>Scan a wine label</h1>
         <p class="subtitle">Photograph your bottle, let AI read the label, then confirm before it logs to your cellar.</p>
 
-        <div
-          id="drop-zone"
-          class="drop-zone"
-          role="button"
-          tabindex="0"
-          aria-label="Upload wine label photo"
-        >
+        <div id="drop-zone" class="drop-zone" role="button" tabindex="0" aria-label="Upload wine label photo">
           <div class="drop-zone-inner" id="drop-idle">
             <svg class="upload-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path d="M24 32V16M16 24l8-8 8 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -41,7 +85,6 @@
             <p class="drop-label">Drop a photo here</p>
             <p class="drop-sub">or click to browse · JPG / PNG</p>
           </div>
-
           <div class="drop-zone-inner hidden" id="drop-preview">
             <img id="preview-img" src="" alt="Label preview" />
             <div class="preview-meta">
@@ -53,9 +96,7 @@
         </div>
 
         <input type="file" id="file-input" accept="image/jpeg,image/jpg,image/png" hidden />
-
         <button class="btn-primary" id="btn-scan" disabled>Scan label →</button>
-
         <p class="error hidden" id="upload-error"></p>
       </div>
     </main>
@@ -79,7 +120,6 @@
         Cellar Ledger
       </div>
     </header>
-
     <main>
       <div class="validate-card">
         <div class="step-badge">Step 2 of 3 — Confirm details</div>
@@ -111,13 +151,11 @@
               <input type="text" id="f-country" name="country" placeholder="e.g. France" />
             </div>
           </div>
-
           <div class="form-actions">
             <button type="button" class="btn-ghost" id="btn-discard">← Start over</button>
             <button type="submit" class="btn-primary">Confirm &amp; research →</button>
           </div>
         </form>
-
         <p class="error hidden" id="validate-error"></p>
       </div>
     </main>
@@ -135,14 +173,12 @@
         Cellar Ledger
       </div>
     </header>
-
     <main>
       <div class="result-card">
         <div class="result-saved">
           <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"/></svg>
           Logged to your cellar
         </div>
-
         <div class="wine-header">
           <h1 id="r-title"></h1>
           <div class="wine-meta">
@@ -150,7 +186,6 @@
             <span id="r-country"></span>
           </div>
         </div>
-
         <div class="result-stats">
           <div class="stat">
             <span class="stat-label">Rating</span>
@@ -161,20 +196,89 @@
             <span class="stat-value" id="r-price"></span>
           </div>
         </div>
-
         <div class="result-section">
           <h2>Tasting notes</h2>
           <p id="r-tasting-notes"></p>
         </div>
-
         <div class="result-section">
           <h2>Aromas &amp; flavors</h2>
           <div id="r-aromas" class="aroma-tags"></div>
         </div>
-
-        <button class="btn-primary" id="btn-new-scan">Scan another bottle</button>
+        <div class="result-actions">
+          <button class="btn-ghost" id="btn-go-cellar-from-result">View my cellar</button>
+          <button class="btn-primary" id="btn-new-scan">Scan another bottle</button>
+        </div>
       </div>
     </main>
+  </div>
+
+  <!-- ── Cellar Screen ─────────────────────────────────── -->
+  <div id="screen-cellar" class="screen">
+    <header>
+      <button class="back-btn" id="btn-cellar-back" aria-label="Back">
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+      </button>
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M8 2h8l1 4H7L8 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M7 6c0 0-2 3-2 7a7 7 0 0014 0c0-4-2-7-2-7H7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M9 13c.5 1.5 2 2.5 3 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Cellar Ledger
+      </div>
+    </header>
+    <main class="cellar-main">
+      <div class="cellar-header">
+        <h1>My Cellar</h1>
+        <span class="cellar-count" id="cellar-count"></span>
+      </div>
+      <p class="error hidden" id="cellar-error"></p>
+      <div id="cellar-list" class="cellar-list"></div>
+      <div id="cellar-empty" class="cellar-empty hidden">
+        <p>No wines logged yet.</p>
+        <button class="btn-primary" id="btn-cellar-scan">Scan your first bottle →</button>
+      </div>
+    </main>
+  </div>
+
+  <!-- ── Edit Modal ─────────────────────────────────────── -->
+  <div id="modal-edit" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modal-title">Edit wine</h2>
+        <button class="modal-close" id="btn-modal-close" aria-label="Close">
+          <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+        </button>
+      </div>
+
+      <div class="modal-wine-name" id="modal-wine-name"></div>
+
+      <div class="modal-field">
+        <label>Have you drunk this bottle?</label>
+        <div class="toggle-row">
+          <button class="toggle-btn active" id="toggle-no" data-value="No">No</button>
+          <button class="toggle-btn" id="toggle-yes" data-value="Yes">Yes</button>
+        </div>
+      </div>
+
+      <div class="modal-field">
+        <label for="my-rating">My personal rating</label>
+        <div class="star-row" id="star-row" aria-label="Rate this wine">
+          <button class="star" data-value="1" aria-label="1 star">★</button>
+          <button class="star" data-value="2" aria-label="2 stars">★</button>
+          <button class="star" data-value="3" aria-label="3 stars">★</button>
+          <button class="star" data-value="4" aria-label="4 stars">★</button>
+          <button class="star" data-value="5" aria-label="5 stars">★</button>
+        </div>
+        <p class="star-label" id="star-label">Not rated</p>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-ghost" id="btn-modal-cancel">Cancel</button>
+        <button class="btn-primary" id="btn-modal-save">Save changes</button>
+      </div>
+      <p class="error hidden" id="modal-error"></p>
+    </div>
   </div>
 
   <script src="app.js"></script>
