@@ -19,8 +19,11 @@ load_dotenv()
 app = FastAPI(title="Cellar Ledger")
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-GOOGLE_SHEETS_CREDENTIALS_FILE = os.getenv("GOOGLE_SHEETS_CREDENTIALS_FILE", "credentials.json")
 GOOGLE_SHEET_ID = os.getenv("GOOGLE_SHEET_ID")
+GOOGLE_SERVICE_ACCOUNT_EMAIL = os.getenv("GOOGLE_SERVICE_ACCOUNT_EMAIL")
+GOOGLE_PRIVATE_KEY_ID = os.getenv("GOOGLE_PRIVATE_KEY_ID")
+# .env stores \n as literal \n — convert back to real newlines
+GOOGLE_PRIVATE_KEY = os.getenv("GOOGLE_PRIVATE_KEY", "").replace("\\n", "\n")
 
 openai_client = OpenAI(api_key=OPENAI_API_KEY)
 
@@ -74,8 +77,14 @@ def resize_and_encode(image_bytes: bytes) -> tuple[str, str]:
 
 
 def append_to_sheet(fields: dict, researched: dict) -> None:
-    creds = Credentials.from_service_account_file(
-        GOOGLE_SHEETS_CREDENTIALS_FILE,
+    creds = Credentials.from_service_account_info(
+        {
+            "type": "service_account",
+            "client_email": GOOGLE_SERVICE_ACCOUNT_EMAIL,
+            "private_key_id": GOOGLE_PRIVATE_KEY_ID,
+            "private_key": GOOGLE_PRIVATE_KEY,
+            "token_uri": "https://oauth2.googleapis.com/token",
+        },
         scopes=["https://www.googleapis.com/auth/spreadsheets"],
     )
     gc = gspread.authorize(creds)
